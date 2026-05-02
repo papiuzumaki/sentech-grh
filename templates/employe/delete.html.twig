@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Supprimer {{ employe.nomComplet }}{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-5">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                Confirmation de suppression
+            </div>
+            <div class="card-body">
+                <p>Voulez-vous vraiment supprimer l'employé <strong>{{ employe.nomComplet }}</strong> ({{ employe.matricule }}) ?</p>
+                <p class="text-muted small">Cette action est irréversible.</p>
+
+                <form method="post" action="{{ path('employe_delete', {id: employe.id}) }}">
+                    <a href="{{ path('employe_index') }}" class="btn btn-secondary">Annuler</a>
+                    <button type="submit" class="btn btn-danger">Oui, supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

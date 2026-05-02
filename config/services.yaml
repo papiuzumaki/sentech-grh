@@ -1,0 +1,20 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # Liaison interface → implémentation concrète
+    App\Service\IEmployeService:
+        class: App\Service\EmployeService
+
+    App\Service\IContratService:
+        class: App\Service\ContratService

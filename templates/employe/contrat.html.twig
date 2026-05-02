@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un contrat — {{ employe.nomComplet }}{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-6">
+        <h2>Nouveau contrat pour {{ employe.nomComplet }}</h2>
+        <hr>
+
+        {{ form_start(form) }}
+
+        <div class="form-group">
+            {{ form_label(form.typeContrat) }}
+            {{ form_widget(form.typeContrat, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.typeContrat) }}
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    {{ form_label(form.dateDebut) }}
+                    {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control', 'required': 'required'}}) }}
+                    {{ form_errors(form.dateDebut) }}
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    {{ form_label(form.dateFin) }}
+                    {{ form_widget(form.dateFin, {'attr': {'class': 'form-control'}}) }}
+                    <small class="text-muted">Laisser vide pour un CDI</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.salaireBase) }}
+            {{ form_widget(form.salaireBase, {'attr': {'class': 'form-control', 'required': 'required', 'min': '0'}}) }}
+            {{ form_errors(form.salaireBase) }}
+            {% if employe.poste %}
+                <small class="text-muted">
+                    Fourchette du poste : {{ employe.poste.salaireMin|number_format(0, ',', ' ') }} — {{ employe.poste.salaireMax|number_format(0, ',', ' ') }} FCFA
+                </small>
+            {% endif %}
+        </div>
+
+        <div class="form-group form-check">
+            {{ form_widget(form.periodeEssai, {'attr': {'class': 'form-check-input'}}) }}
+            {{ form_label(form.periodeEssai, null, {'label_attr': {'class': 'form-check-label'}}) }}
+        </div>
+
+        <a href="{{ path('employe_details', {id: employe.id}) }}" class="btn btn-secondary">Annuler</a>
+        <button type="submit" class="btn btn-success">Enregistrer le contrat</button>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

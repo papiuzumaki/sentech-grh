@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ employe.nomComplet }} — Détails{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between mb-3">
+    <h2>{{ employe.nomComplet }}</h2>
+    <div>
+        <a href="{{ path('employe_edit', {id: employe.id}) }}" class="btn btn-warning">Modifier</a>
+        <a href="{{ path('employe_ajouter_contrat', {id: employe.id}) }}" class="btn btn-success">+ Contrat</a>
+        <a href="{{ path('employe_index') }}" class="btn btn-secondary">Retour</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">Informations personnelles</div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-5">Matricule</dt>
+                    <dd class="col-7">{{ employe.matricule }}</dd>
+
+                    <dt class="col-5">Email</dt>
+                    <dd class="col-7">{{ employe.email }}</dd>
+
+                    <dt class="col-5">Date de naissance</dt>
+                    <dd class="col-7">{{ employe.dateNaissance ? employe.dateNaissance|date('d/m/Y') : '—' }}</dd>
+
+                    <dt class="col-5">Âge</dt>
+                    <dd class="col-7">{{ employe.age }} ans</dd>
+
+                    <dt class="col-5">Genre</dt>
+                    <dd class="col-7">{{ employe.genre }}</dd>
+
+                    <dt class="col-5">Département</dt>
+                    <dd class="col-7">{{ employe.departement ? employe.departement.nom : '—' }}</dd>
+
+                    <dt class="col-5">Poste</dt>
+                    <dd class="col-7">{{ employe.poste ? employe.poste.intitule : '—' }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">Contrats</div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Début</th>
+                            <th>Fin</th>
+                            <th>Salaire</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for contrat in employe.contrats %}
+                            <tr>
+                                <td>{{ contrat.typeContrat.value }}</td>
+                                <td>{{ contrat.dateDebut|date('d/m/Y') }}</td>
+                                <td>{{ contrat.dateFin ? contrat.dateFin|date('d/m/Y') : 'Indéterminée' }}</td>
+                                <td>{{ contrat.salaireBase|number_format(0, ',', ' ') }} FCFA</td>
+                                <td>
+                                    {% if contrat.estActif %}
+                                        <span class="badge badge-success">Actif</span>
+                                    {% else %}
+                                        <span class="badge badge-secondary">Terminé</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="5" class="text-center text-muted">Aucun contrat</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-dark text-white">Évaluations</div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr><th>Période</th><th>Note</th><th>Date</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for eval in employe.evaluations %}
+                            <tr>
+                                <td>{{ eval.periode }}</td>
+                                <td>{{ eval.note }}/20</td>
+                                <td>{{ eval.dateEvaluation|date('d/m/Y') }}</td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="3" class="text-center text-muted">Aucune évaluation</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
