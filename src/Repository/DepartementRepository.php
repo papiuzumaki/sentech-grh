@@ -18,7 +18,6 @@ class DepartementRepository extends ServiceEntityRepository
         return $this->findOneBy(['code' => $code]);
     }
 
-    // Retourne la somme des salaires actifs dans un département
     public function getTotalSalairesActifs(int $departementId): float
     {
         $result = $this->getEntityManager()

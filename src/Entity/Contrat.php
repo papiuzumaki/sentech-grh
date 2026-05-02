@@ -24,7 +24,6 @@ class Contrat
     #[Assert\NotNull(message: 'La date de début est obligatoire.')]
     private ?\DateTimeInterface $dateDebut = null;
 
-    // nullable pour les CDI
     #[ORM\Column(name: 'date_fin', type: 'date', nullable: true)]
     private ?\DateTimeInterface $dateFin = null;
 

@@ -19,7 +19,6 @@ class EmployeRepository extends ServiceEntityRepository
         return $this->findOneBy(['matricule' => $matricule]);
     }
 
-    // Récupère les employés avec leurs relations pour la liste
     public function findTousAvecRelations(): QueryBuilder
     {
         return $this->createQueryBuilder('e')

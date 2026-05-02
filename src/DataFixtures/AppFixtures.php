@@ -14,7 +14,6 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // -- 3 Départements --
         $dsi = new Departement();
         $dsi->setNom('Direction des Systèmes d\'Information')
             ->setCode('DSI')
@@ -33,7 +32,6 @@ class AppFixtures extends Fixture
             ->setBudget(12000000);
         $manager->persist($finance);
 
-        // -- 5 Postes --
         $devSenior = new Poste();
         $devSenior->setIntitule('Développeur Senior')
             ->setNiveauHierarchique(3)
@@ -69,7 +67,6 @@ class AppFixtures extends Fixture
             ->setSalaireMax(750000);
         $manager->persist($rhManager);
 
-        // -- 10 Employés --
         $donneesEmployes = [
             ['EMP001', 'Diallo', 'Mamadou', 'mamadou.diallo@sentech.sn', '1988-03-15', 'Homme',   $dsi,     $devSenior, TypeContrat::CDI,  650000],
             ['EMP002', 'Ndiaye', 'Fatou',   'fatou.ndiaye@sentech.sn',   '1992-07-22', 'Femme',   $rh,      $rhManager, TypeContrat::CDI,  580000],

@@ -23,7 +23,6 @@ class OperationSubscriber implements EventSubscriberInterface
     public function onRequest(RequestEvent $event): void
     {
         $req = $event->getRequest();
-        // On journalise uniquement les requêtes POST (créations/modifications)
         if ($req->isMethod('POST')) {
             $this->logger->info('[GRH] Requête POST reçue', [
                 'route' => $req->getPathInfo(),

@@ -23,7 +23,6 @@ class EmployeService implements IEmployeService
         private DepartementRepository $deptRepo,
     ) {}
 
-    // RG05 : âge minimum 18 ans à l'embauche
     public function validerAgeEmbauche(Employe $employe): bool
     {
         if ($employe->getDateNaissance() === null) return false;
@@ -34,7 +33,6 @@ class EmployeService implements IEmployeService
     public function creerEmploye(Employe $employe): ServiceResult
     {
         try {
-            // RG05
             if (!$this->validerAgeEmbauche($employe)) {
                 return ServiceResult::echec('L\'employé doit avoir au moins 18 ans.');
             }
@@ -62,7 +60,6 @@ class EmployeService implements IEmployeService
         }
     }
 
-    // RG03 : pas de suppression si CDI actif ou congés en attente
     public function supprimerEmploye(int $id): ServiceResult
     {
         try {
@@ -88,17 +85,14 @@ class EmployeService implements IEmployeService
         }
     }
 
-    // RG01 + RG02 : un seul contrat actif, salaire dans la fourchette du poste
     public function ajouterContrat(Employe $employe, Contrat $contrat): ServiceResult
     {
         try {
-            // RG01
             $contratExistant = $this->contratRepo->findContratActif($employe);
             if ($contratExistant !== null) {
                 return ServiceResult::echec('Cet employé a déjà un contrat actif. Clôturez-le d\'abord.');
             }
 
-            // RG02
             $poste = $employe->getPoste();
             if ($poste !== null) {
                 $salaire = $contrat->getSalaireBase();
@@ -114,7 +108,6 @@ class EmployeService implements IEmployeService
                 }
             }
 
-            // RG07 : vérifier le budget du département
             $dept = $employe->getDepartement();
             if ($dept !== null) {
                 $totalActuel = $this->deptRepo->getTotalSalairesActifs($dept->getId());
@@ -135,7 +128,6 @@ class EmployeService implements IEmployeService
         }
     }
 
-    // Tranfert avec transaction Doctrine
     public function transfererEmploye(int $employeId, int $nouveauDepartementId, Contrat $nouveauContrat): ServiceResult
     {
         $this->em->beginTransaction();
@@ -151,20 +143,17 @@ class EmployeService implements IEmployeService
                 return ServiceResult::echec('Département cible introuvable.');
             }
 
-            // Clôturer l'ancien contrat
             $ancienContrat = $this->contratRepo->findContratActif($employe);
             if ($ancienContrat !== null) {
                 $ancienContrat->setDateFin(new \DateTime());
             }
 
-            // Vérifier budget nouveau département
             $totalActuel = $this->deptRepo->getTotalSalairesActifs($nouveauDepartementId);
             if (($totalActuel + $nouveauContrat->getSalaireBase()) > $nouveauDept->getBudget()) {
                 $this->em->rollback();
                 return ServiceResult::echec('Le budget du département cible sera dépassé.');
             }
 
-            // Affecter le nouvel département et créer le contrat
             $employe->setDepartement($nouveauDept);
             $nouveauContrat->setEmploye($employe);
             $this->em->persist($nouveauContrat);
@@ -179,7 +168,6 @@ class EmployeService implements IEmployeService
         }
     }
 
-    // RG06 : ancienneté minimum 6 mois avant évaluation
     public function verifierAnciennete(Employe $employe): bool
     {
         $contrats = $employe->getContrats();
@@ -193,7 +181,6 @@ class EmployeService implements IEmployeService
         return $mois >= 6;
     }
 
-    // RG04 : max 30 jours de congé annuel
     public function verifierQuotaConge(Employe $employe, int $joursSupplementaires): bool
     {
         $annee = (int) (new \DateTime())->format('Y');

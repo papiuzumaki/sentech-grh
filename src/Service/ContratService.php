@@ -40,7 +40,6 @@ class ContratService implements IContratService
         }
     }
 
-    // RG02 vérification du salaire par rapport à la grille du poste
     public function verifierSalaire(Contrat $contrat, Employe $employe): bool
     {
         $poste = $employe->getPoste();

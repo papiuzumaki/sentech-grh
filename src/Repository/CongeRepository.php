@@ -30,7 +30,6 @@ class CongeRepository extends ServiceEntityRepository
         return $count > 0;
     }
 
-    // Calcule le total jours de congé annuels pris sur une année donnée
     public function totalJoursAnnuels(Employe $employe, int $annee): int
     {
         $conges = $this->createQueryBuilder('c')
